@@ -1,22 +1,36 @@
-
 package CarSimulator;
 
+import java.util.*;
 public class Main {
 
  static RoadMap map = new RoadMap();
  static char[][] road = map.getRoad();
  
     public static void main(String[] args){
-        
-       
-        printMap();
-        slowdown();
-        clearScreen(); 
-        /*
-            while()
-
-
+        Car car = new Car();
+        map.setPoint(car.getX(), car.getY(), 'M');  //setting the car's position
+        /*printMap();
+        System.out.println("Do you want to start now?");
+        Scanner input = new Scanner(System.in);
+        String answer = input.nextLine();
+        if(answer == "Ya"){
+            car.run();
+        }
+        input.close();
         */
+        int count = 0;
+        //belum di buat boolean destinasinya
+        while(count<10){
+            printMap();
+            // bikin toString di car yang begini ->
+            System.out.println("Car is driving on ("+car.getX()+", "+car.getY()+") axis and going to east direction.");
+            slowdown();
+            clearScreen();
+            map.setPoint(car.getX(), car.getY(), ' ');
+            car.action();
+            map.setPoint(car.getX(), car.getY(), 'M');
+            count++;
+        }
     }
     public static void printMap(){
     
@@ -33,10 +47,9 @@ public class Main {
        } 
     public static void slowdown(){
         try {
-            Thread.sleep(5000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-    }
-   
+    }    
 }

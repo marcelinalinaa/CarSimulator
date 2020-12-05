@@ -86,20 +86,20 @@ public class Car {
 	    if(obstacles != null){
 	        for(int i = 0; i<obstacles.size(); i++)
 	        {
-	        	if(obstacles.get(keyObstacle.get(i)) == 'C' && carCoords.getCoordsX()== keyObstacle.get(i).getCoordsX()) {
+	        	if(obstacles.get(keyObstacle.get(i)) == 'C' && x== keyObstacle.get(i).getCoordsX()) {
 	        		for(int j = 0; j < obstacles.size();j++) {
-	        			if(keyObstacle.get(j).getCoordsY() == carCoords.getCoordsY()) {
+	        			if(keyObstacle.get(j).getCoordsY() == y) {
 	        				// cek sebelah kiri mobil, jika mobil menghadap ke east
-	        				if(keyObstacle.get(j).getCoordsX() == carCoords.getCoordsX()-1) {
-	        					if(keyObstacle.get(j).getCoordsX() == carCoords.getCoordsX()+1) {
+	        				if(keyObstacle.get(j).getCoordsX() == x-1) {
+	        					if(keyObstacle.get(j).getCoordsX() == x+1) {
 	        						pedals.decelerateToN(0);
 	        					}
 	        					else {
-	        						//belok ke kanan
+	        						moveRight();
 	        					}
 	        				}
 	        				else {
-	        					//belok ke kiri
+	        					moveLeft();
 	        				}
 	        				}
 	        			}
@@ -128,36 +128,36 @@ public class Car {
 	        		}
 	        		else if(x < obs_x) {
 	        			if(direction =='e') {
-		        			while(x!=obs_x+1 && y!= obs_y) {
+		        			while(x!=obs_x-1 && y!= obs_y) {
 		        				moveDiagonallyToTheRight();
 		        			}
 	        			}
 	        			else if(direction =='w') {
-	        				while(x!=obs_x+1 && y!= obs_y) {
+	        				while(x!=obs_x-1 && y!= obs_y) {
 		        				moveDiagonallyToTheLeft();
 		        			}
 	        			}
 	        		}
 	        		else if(y<obs_y) {
 	        			if(direction =='s') {
-		        			while(x!=obs_x+1 && y!= obs_y) {
+		        			while(x!=obs_x && y!= obs_y-1) {
 		        				moveDiagonallyToTheLeft();
 		        			}
 	        			}
 	        			else if(direction =='n') {
-	        				while(x!=obs_x+1 && y!= obs_y) {
+	        				while(x!=obs_x && y!= obs_y-1) {
 		        				moveDiagonallyToTheRight();
 		        			}
 	        			}
 	        		}
 	        		else {
 	        			if(direction =='s') {
-		        			while(x!=obs_x+1 && y!= obs_y) {
+		        			while(x!=obs_x && y!= obs_y+1) {
 		        				moveDiagonallyToTheRight();
 		        			}
 	        			}
 	        			else if(direction =='n') {
-	        				while(x!=obs_x+1 && y!= obs_y) {
+	        				while(x!=obs_x && y!= obs_y+1) {
 		        				moveDiagonallyToTheLeft();
 		        			}
 	        			}

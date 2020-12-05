@@ -12,8 +12,8 @@ public class Main {
         char[][] road;
         road = map.getRoad();
         
-        for(int i = 0; i <20;i++) {
-            for(int j = 0; j <40; j++) {
+        for(int i = 0; i <15;i++) {
+            for(int j = 0; j <35; j++) {
                 System.out.print(road[i][j]);
             }
         System.out.println();

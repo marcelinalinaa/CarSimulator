@@ -12,21 +12,23 @@ public class CameraCensor{
 	public RoadMap map;
 	public char direction;
 	public static final int censorRange = 3;
-	private HashMap<Coords, String> obstacles = new HashMap<Coords, String>();
+	private HashMap<Coords, Character> obstacles = new HashMap<Coords, Character>();
 	private HashMap<Coords, Double> distance = new HashMap<Coords, Double>();
 
 	public CameraCensor(char direction){
 	map = new RoadMap();
 	this.direction = direction ;
+	this.obstacles = null;
+	this.distance = null;
 	}
 
 	/*public void readMap(RoadMap road[][]) {
 	}
 	*/
 	public void findObstacles(int x, int y){
-		String[][] road = map.getRoad();
-		HashMap<Coords, String> obstacles = new HashMap<Coords, String>();
-		HashMap<Coords, Double> distance = new HashMap<Coords, Double>();
+		char[][] road = map.getRoad();
+		obstacles = new HashMap<Coords, Character>();
+		distance = new HashMap<Coords, Double>();
 		if(direction == 'e') {
 			//alur iterasinya, untuk setiap kolom, akan di cek setiap barisnya
 			for(int j = y; j<=y+censorRange; j++) {
@@ -60,17 +62,21 @@ public class CameraCensor{
 		}
 	}
 	
-	public HashMap<Coords, String> getObstacles(){
-		return obstacles;
+	public HashMap<Coords, Character> getObstacles(int x, int y){
+		findObstacles(x, y);
+		return this.obstacles;
 	}
 	
-	public HashMap<Coords, Double> getCoordsDistance(){
-		return sortByValue(distance);
+	public HashMap<Coords, Double> getCoordsDistance(int x, int y){
+		findObstacles(x, y);
+		this.distance = sortByValue(this.distance);
+		return this.distance;
 	}
 
 	
 	public double calculateDistance(int x1, int y1, int x2, int y2) {
-		return Math.sqrt((x2-x1)^2 - (y2-y1)^2);
+		double dist = Math.sqrt(Math.pow((x2-x1),2) + Math.pow((y2-y1),2));
+		return dist;
 	}
 
 	public void setMaxRange(float maxRange) {

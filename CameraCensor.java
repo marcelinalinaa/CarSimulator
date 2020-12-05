@@ -1,7 +1,6 @@
 package carSimulator;
 
 import java.util.*;
-import java.util.Map.Entry;
 
 public class CameraCensor{
 	// private float x;
@@ -13,7 +12,7 @@ public class CameraCensor{
 	public RoadMap map;
 	public char direction;
 	public static final int censorRange = 3;
-	private HashMap<Coords, Character> obstacles = new HashMap<Coords, Character>();
+	private HashMap<Coords, String> obstacles = new HashMap<Coords, String>();
 	private HashMap<Coords, Double> distance = new HashMap<Coords, Double>();
 
 	public CameraCensor(char direction){
@@ -25,8 +24,8 @@ public class CameraCensor{
 	}
 	*/
 	public void findObstacles(int x, int y){
-		char[][] road = map.getRoad();
-		HashMap<Coords, Character> obstacles = new HashMap<Coords, Character>();
+		String[][] road = map.getRoad();
+		HashMap<Coords, String> obstacles = new HashMap<Coords, String>();
 		HashMap<Coords, Double> distance = new HashMap<Coords, Double>();
 		if(direction == 'e') {
 			//alur iterasinya, untuk setiap kolom, akan di cek setiap barisnya
@@ -61,7 +60,7 @@ public class CameraCensor{
 		}
 	}
 	
-	public HashMap<Coords, Character> getObstacles(){
+	public HashMap<Coords, String> getObstacles(){
 		return obstacles;
 	}
 	
@@ -318,23 +317,23 @@ public class CameraCensor{
 	    }
 	    return obstacle;
 	}*/
-	/*public CameraCensor(float maxRange, float x, float y, float x2, float y2){
-	setMaxRange(maxRange);
-	setX(x);
-	setY(y);
-	}
+		/*public CameraCensor(float maxRange, float x, float y, float x2, float y2){
+		setMaxRange(maxRange);
+		setX(x);
+		setY(y);
+		}
+		*/
+
+		/* public float calculateDistanceXAxis() {
+		return x2 - x;
+		}
+	
+		public float calculateDistanceYAxis() {
+		return y2-y;
+		}
+
 	*/
-
-	/* public float calculateDistanceXAxis() {
-	return x2 - x;
-	}
-
-	public float calculateDistanceYAxis() {
-	return y2-y;
-	}
-
-	*/
-	// public float read(boolean isVertical) {
+	// 	public float read(boolean isVertical) {
 	//// float maxDist;
 	// if(isVertical) {
 	// return this.y + this.maxRange;
@@ -344,21 +343,21 @@ public class CameraCensor{
 	// }
 	// }
 /*
-public void setX(float x) {
-this.x = x;
-}
-
-public float getX(){
-return x;
-}
-
-public void setY(float y) {
-this.y = y;
-}
-
-public float getY(){
-return y;
-}
+		public void setX(float x) {
+		this.x = x;
+		}
+		
+		public float getX(){
+		return x;
+		}
+		
+		public void setY(float y) {
+		this.y = y;
+		}
+		
+		public float getY(){
+		return y;
+		}
 /
 /
 		public String sendWarnings(){
@@ -384,10 +383,4 @@ return y;
 		}
 		}
 		*/
- 
-
-
-
 }
-
-     

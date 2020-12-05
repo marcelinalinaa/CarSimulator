@@ -32,6 +32,50 @@ public class Car {
 	public int getY(){
 	    return y;
 	}
+	
+	//dibuat 22:18 5 dec
+	public void moveDiagonallyToTheLeft() {
+		int temp_x = getX();
+		int temp_y = getY();
+		if(direction == 'e') {
+			temp_x = temp_x - (int) (speedometer.getSpeed()/10);
+			temp_y = temp_y + (int) (speedometer.getSpeed()/10);
+		}
+		else if(direction == 's') {
+			temp_x = temp_x + (int) (speedometer.getSpeed()/10);
+			temp_y = temp_y + (int) (speedometer.getSpeed()/10);
+		}
+		else if(direction == 'n') {
+			temp_x = temp_x - (int) (speedometer.getSpeed()/10);
+			temp_y = temp_y - (int) (speedometer.getSpeed()/10);
+		}
+		else {
+			temp_x = temp_x + (int) (speedometer.getSpeed()/10);
+			temp_y = temp_y - (int) (speedometer.getSpeed()/10);
+		}
+	}
+
+	// dibuat 22:20 5 dec
+	public void moveDiagonallyToTheRight() {
+		int temp_x = getX();
+		int temp_y = getY();
+		if(direction == 'e') {
+			temp_x = temp_x + (int) (speedometer.getSpeed()/10);
+			temp_y = temp_y + (int) (speedometer.getSpeed()/10);
+		}
+		else if(direction == 's') {
+			temp_x = temp_x + (int) (speedometer.getSpeed()/10);
+			temp_y = temp_y - (int) (speedometer.getSpeed()/10);
+		}
+		else if(direction == 'n') {
+			temp_x = temp_x - (int) (speedometer.getSpeed()/10);
+			temp_y = temp_y + (int) (speedometer.getSpeed()/10);
+		}
+		else {
+			temp_x = temp_x - (int) (speedometer.getSpeed()/10);
+			temp_y = temp_y - (int) (speedometer.getSpeed()/10);
+		}
+	}
 
 	public void action(){
 	    Coords carCoords = new Coords(x,y);
@@ -68,25 +112,55 @@ public class Car {
 	        		pedals.accelerateToN(20);
 	        	}
 	        	else if(obstacles.get(keyObstacle.get(i)) == 'P' ) {
-	        		int car_x = carCoords.getCoordsX();
-	        		int car_y = carCoords.getCoordsY();
 	        		int obs_x = keyObstacle.get(i).getCoordsX();
 	        		int obs_y = keyObstacle.get(i).getCoordsY();
-	        		if(car_x > obs_x) {
-	        			car_x--;
-	        			car_y++;
+	        		if(x > obs_x) {
+	        			if(direction =='e') {
+		        			while(x!=obs_x+1 && y!= obs_y) {
+		        				moveDiagonallyToTheLeft();
+		        			}
+	        			}
+	        			else if(direction =='w') {
+	        				while(x!=obs_x+1 && y!= obs_y) {
+		        				moveDiagonallyToTheRight();
+		        			}
+	        			}
 	        		}
-	        		else if(car_x < obs_x) {
-	        			car_x++;
-	        			car_y++;
+	        		else if(x < obs_x) {
+	        			if(direction =='e') {
+		        			while(x!=obs_x+1 && y!= obs_y) {
+		        				moveDiagonallyToTheRight();
+		        			}
+	        			}
+	        			else if(direction =='w') {
+	        				while(x!=obs_x+1 && y!= obs_y) {
+		        				moveDiagonallyToTheLeft();
+		        			}
+	        			}
 	        		}
-	        		else if(car_y<obs_y) {
-	        			car_x++;
-	        			car_y++;
+	        		else if(y<obs_y) {
+	        			if(direction =='s') {
+		        			while(x!=obs_x+1 && y!= obs_y) {
+		        				moveDiagonallyToTheLeft();
+		        			}
+	        			}
+	        			else if(direction =='n') {
+	        				while(x!=obs_x+1 && y!= obs_y) {
+		        				moveDiagonallyToTheRight();
+		        			}
+	        			}
 	        		}
 	        		else {
-	        			car_x++;
-	        			car_y--;
+	        			if(direction =='s') {
+		        			while(x!=obs_x+1 && y!= obs_y) {
+		        				moveDiagonallyToTheRight();
+		        			}
+	        			}
+	        			else if(direction =='n') {
+	        				while(x!=obs_x+1 && y!= obs_y) {
+		        				moveDiagonallyToTheLeft();
+		        			}
+	        			}
 	        		}
 	        	}
 	        	

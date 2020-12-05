@@ -156,23 +156,85 @@ public class Car {
 	    whenLeftTurn = l;
 	}
 
-	public void findTurns(){
-		 boolean[][] temp = censor.findRoad(x, y);
-	        if(direction == 'e') {
-	            for(int i = 3; i >= 0; i--){
-	                if(temp[0][i] && temp[1][i]){
-	                    setLeftTurn(i + 1);
-	                } else if(temp[3][i] && temp[4][i]){
-	                    setRightTurn(i + 1);
-	                }
-	            }
-	        } else if(direction == 'w') {
-	            ;
-	        } else if(direction == 'n') {
-	            ;
-	        } else {
-	            ;
-	        }
+	public void findTurns(RoadMap road){
+	    boolean[][] temp = censor.findRoad(x, y);
+        if(direction == 'e') {
+            for(int i = 4; i >= 0; i--){
+                if(temp[0][i] && temp[1][i]){
+                    setLeftTurn(i + 1);
+                } else if(temp[3][i] && temp[4][i]){
+                    setRightTurn(i + 1);
+                }
+            }
+        } else if(direction == 'w') {
+            for(int i = 0; i <= 4; i++){
+				if(temp[3][i] && temp[4][i]){
+                    setLeftTurn(5 - i);
+                } else if(temp[0][i] && temp[1][i]){
+                    setRightTurn(5 - i);
+                }
+			}
+        } else if(direction == 'n') {
+            for(int i = 0; i <= 4; i++){
+				if(temp[i][0] && temp [i][1]){
+					setLeftTurn(5 - i);
+				} else if(temp[i][3] && temp[i][4]){
+					setRightTurn(5 - i);
+				}
+			}
+        } else {
+            for(int i = 4; i >= 0; i++){
+				if(temp[i][3] && temp[i][4]){
+					setLeftTurn(i + 1);
+				} else if(temp[i][0] && temp[i][1]){
+					setRightTurn(i + 1);
+				}
+			}
+        }
+	}
+
+	public void moveForward(){
+		int temp_x = getX();
+		int temp_y = getY();
+        
+		if(direction == 'w'){
+			temp_x = temp_x - (int)(speedometer.getSpeed()/10);
+		} else if(direction == 'e'){
+			temp_x = temp_x + (int)(speedometer.getSpeed()/10);
+		} else if(direction == 'n'){
+			temp_y = temp_y - (int)(speedometer.getSpeed()/10);
+		} else if(direction == 's'){
+			temp_y = temp_y + (int)(speedometer.getSpeed()/10);
+		}
+		setCoords(temp_x, temp_y);
+    	}
+
+	public void turnRight(){
+		if(getRightTurn() == 0){
+			if(direction == 'e'){
+				direction = 's';
+			} else if(direction == 'n'){
+				direction = 'e';
+			} else if(direction == 'w'){
+				direction = 'n';
+			} else {
+				direction = 'w';
+			}
+		}
+	}
+
+	public void turnLeft(){
+		if(getLeftTurn() == 0){
+			if(direction == 'e'){
+				direction = 'n';
+			} else if(direction == 'n'){
+				direction = 'w';
+			} else if(direction == 'w'){
+				direction = 's';
+			} else {
+				direction = 'w';
+			}
+		}
 	}
 
 	public void accelerate(int n){

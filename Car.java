@@ -15,11 +15,24 @@ public class Car {
 	private char direction;
 	private Pedals pedals;
 
-	public Car (int x, int y, char direction){
-	    setCoords(x, y);
+	//Car default constructor
+	public Car (){
+		int a = (int) Math.floor(Math.random() * (3 - 1) + 1);
+        int b = 0;
+		setCoords(a, b);
+		this.direction = 'e'; //the default direction is east
+		speedometer = new Speedometer(10,0);
 	    censor = new CameraCensor(direction);
 	}
 
+	//another car constructor
+	public Car (int x, int y, char direction){
+		setCoords(x, y);
+		this.direction = direction;
+		speedometer = new Speedometer(10,10);
+	    censor = new CameraCensor(direction);
+	}
+	
 	public void setCoords(int x, int y){
 	    this.x = x;
 	    this.y = y;
@@ -32,7 +45,7 @@ public class Car {
 	public int getY(){
 	    return y;
 	}
-	
+
 	public void run(){
         if(direction == 'e'){
             y = y + (speedometer.getSpeed()/10);
@@ -84,16 +97,16 @@ public class Car {
 		int temp_y = getY();
         
 		if(direction == 'w'){
-			temp_x = temp_x - (int)(speedometer.getSpeed()/10);
-		} else if(direction == 'e'){
-			temp_x = temp_x + (int)(speedometer.getSpeed()/10);
-		} else if(direction == 'n'){
 			temp_y = temp_y - (int)(speedometer.getSpeed()/10);
-		} else if(direction == 's'){
+		} else if(direction == 'e'){
 			temp_y = temp_y + (int)(speedometer.getSpeed()/10);
+		} else if(direction == 'n'){
+			temp_x = temp_x - (int)(speedometer.getSpeed()/10);
+		} else if(direction == 's'){
+			temp_x = temp_x + (int)(speedometer.getSpeed()/10);
 		}
 		setCoords(temp_x, temp_y);
-    	}
+    }
 
 	public void moveRight(){
 		int temp_x = getX();
@@ -196,17 +209,17 @@ public class Car {
 		setCoords(temp_x, temp_y);
 	}
 	
+
 	public void action() {
 	    obstacles = null;
-	    obstacles = censor.getObstacles();
-	    HashMap<Coords, Double> distance = censor.getCoordsDistance();
+	    obstacles = censor.getObstacles(x,y);
+	    HashMap<Coords, Double> distance = censor.getCoordsDistance(x,y);
 	    List<Coords> keyObstacle = new ArrayList<>(distance.keySet());
-	    if(obstacles != null){
 	        if(direction == 'e') {
 	    	for(int i = 0; i<obstacles.size(); i++)
 	        {
 //	        	cek apakah ada cone, dan cone tsb sejajar dgn jalur mobil (pas d dpnnya)
-	        	if(obstacles.get(keyObstacle.get(i)) == 'C' && x== keyObstacle.get(i).getCoordsX()) {
+	        	if(obstacles.get(keyObstacle.get(i)) == 'C' && x == keyObstacle.get(i).getCoordsX()) {
 //	        		cek apakah ada sesuatu di sebelah mobil
 	        		for(int j = 0; j < obstacles.size();j++) {
 //	        		kalau misalnya cone sejajar (dalam column) dgn mobil	
@@ -216,29 +229,35 @@ public class Car {
 //	        				cek serong depan kanannya mobil
 	        					if(keyObstacle.get(j).getCoordsX() == x+1 && keyObstacle.get(j).getCoordsY() == y+1 ) {
 //	        					karena serong kiri kanan ada, makanya stop
-	        						pedals.decelerateToN(0);
+									pedals.decelerateToN(0);
+									break;
 	        					}
 //	        				kalo misal gada dikanan, kita kekanan
 	        					else {
-	        						moveDiagonallyToTheRight();
+									moveDiagonallyToTheRight();
+									break;
 	        					}
 	        				}
 	        				else {
-	        					moveDiagonallyToTheLeft();
+								moveDiagonallyToTheLeft();
+								break;
 	        				}
 	        				}
 	        			}
 	        		}
 //	        	kalau misal mobil ud sejajar sm rambu merah, dia hrs stop (ini buat east)
 	        	else if(obstacles.get(keyObstacle.get(i)) == 'R' && y== keyObstacle.get(i).getCoordsY() ){
-	        		pedals.decelerateToN(0);
+					pedals.decelerateToN(0);
+					break;
 	        	}
 //	        	kalau misal mobil ud sejajar sm rambu merah, dia hrs stop (ini ke south)
 	        	else if(obstacles.get(keyObstacle.get(i)) == 'R' && x== keyObstacle.get(i).getCoordsX() ){
-	        		pedals.decelerateToN(0);
+					pedals.decelerateToN(0);
+					break;
 	        	}
 	        	else if(obstacles.get(keyObstacle.get(i)) == 'G') {
-	        		moveForward();
+					moveForward();
+					break;
 	        	}
 	        	else if(obstacles.get(keyObstacle.get(i)) == 'P' ) {
 	        		int obs_x = keyObstacle.get(i).getCoordsX();
@@ -247,11 +266,13 @@ public class Car {
 	        			for(int j = 0; j < obstacles.size();j++) {
 //	    	        		cek serong depan kanannya mobil
 	    	        		if(keyObstacle.get(j).getCoordsX() == x+1 && keyObstacle.get(j).getCoordsY() == y+1 ) {
-	    	        			moveForward();
+								moveForward();
+								break;
 	    	        		}
 //	    	        		kalo misal gada dikanan, kita kekanan
 	    	        		else {
-	    	        			moveDiagonallyToTheRight();
+								moveDiagonallyToTheRight();
+								break;
 	    	        		}
 	    	        	}		
 	    	        }
@@ -265,11 +286,13 @@ public class Car {
 	        			for(int j = 0; j < obstacles.size();j++) {
 	    	        	// cek serong depan kiri mobil, jika mobil menghadap ke east
 	    	        		if(keyObstacle.get(j).getCoordsX() == x-1 && keyObstacle.get(j).getCoordsY() == y+1 ) {
-	    	        			moveForward();
+								moveForward();
+								break;
 	    	        		}
 //	    	        		kalo misal gada di serong kiri dpn, kita ke serong kiri
 	    	        		else {
-	    	        			moveDiagonallyToTheLeft();
+								moveDiagonallyToTheLeft();
+								break;
 	    	        		}
 	    	        	}				
 	        		}
@@ -281,60 +304,39 @@ public class Car {
 	        		else if(y<obs_y) {
 	        			if(direction =='s') {
 		        			while(x!=obs_x && y!= obs_y-1) {
-		        				moveDiagonallyToTheLeft();
+								moveDiagonallyToTheLeft();
+								break;
 		        			}
 	        			}
 	        			else if(direction =='n') {
 	        				while(x!=obs_x && y!= obs_y-1) {
-		        				moveDiagonallyToTheRight();
+								moveDiagonallyToTheRight();
+								break;
 		        			}
 	        			}
 	        		}
 	        		else {
 	        			if(direction =='s') {
 		        			while(x!=obs_x && y!= obs_y+1) {
-		        				moveDiagonallyToTheRight();
+								moveDiagonallyToTheRight();
+								break;
 		        			}
 	        			}
 	        			else if(direction =='n') {
 	        				while(x!=obs_x && y!= obs_y+1) {
-		        				moveDiagonallyToTheLeft();
+								moveDiagonallyToTheLeft();
+								break;
 		        			}
 	        			}
 	        		}
-	        	}
-	        	
+				}
+				        	
 //	        	else if(obstacles.get(keyObstacle.get(i)) == 'S') {
 //	        		//ask do u want to stop? if yes, stop. if not, keep moving
 //	        	}
 	        }
 	      }
-	        
-	        /*
-
-	        misal punya 2 list, lisst obstacle dan arraylist(x,y)
-	            
-	        
-
-	        if liat S
-	            call method print nanya mau berhenti atau tidak
-	            if yes, stop
-	            else, keep going
-	        if liat P
-	            call method print nanya mau berhenti atau tidak
-	            park (ke pinggir)
-	        if liat orang
-	            slowdown
-	        if ada lampu merah
-	            berhenti
-	        if lampu kuning
-	            decelerate
-	        if lampu hijau 
-	            keep going
-	        if depan ada mobil
-	            cek distance difference(?)
-	         */
-	    } 
+		  moveForward();
 	}
 	   //function to get key from given valu
 	public static List<Coords> findKey(HashMap<Coords, Double> a, double value) {

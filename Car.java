@@ -283,16 +283,16 @@ public class Car {
 		setCoords(temp_x, temp_y);
     	}
 
-	public void turnRight(){
+	public void moveRight(){
 		if(getRightTurn() == 0){
 			if(direction == 'e'){
-				direction = 's';
+				setCoords(x, y + 1);
 			} else if(direction == 'n'){
-				direction = 'e';
+				setCoords(x + 1, y);
 			} else if(direction == 'w'){
-				direction = 'n';
+				setCoords(x, y - 1);
 			} else {
-				direction = 'w';
+				setCoords(x - 1, y);
 			}
 		}
 	}
@@ -307,6 +307,20 @@ public class Car {
 				direction = 's';
 			} else {
 				direction = 'w';
+			}
+		}
+	}
+
+	public void moveLeft(){
+		if(getLeftTurn() == 0){
+			if(direction == 'e'){
+				setCoords(x, y - 1);
+			} else if(direction == 'n'){
+				setCoords(x - 1, y);
+			} else if(direction == 'w'){
+				setCoords(x, y + 1);
+			} else {
+				setCoords(x + 1, y);
 			}
 		}
 	}

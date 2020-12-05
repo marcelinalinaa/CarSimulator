@@ -30,10 +30,15 @@ public class RoadMap {
         int count = 0;
         int a,b;
         String cone = "\uD83D\uDEA7";
+        String trafficLight = "\uD83D\uDEA6";
         int coneCodePoint = cone.codePointAt(cone.offsetByCodePoints(0,0));
+        int trafficCodePoint = trafficLight.codePointAt(trafficLight.offsetByCodePoints(0, 0));
+
         int mysteryConeCodePoint = coneCodePoint + 1;
+        int mysteryTrafficCodePoint = trafficCodePoint + 1;
 
         char mysteryCone[] = {Character.highSurrogate(mysteryConeCodePoint), Character.lowSurrogate(mysteryConeCodePoint)};
+        char mysteryTraffic[] = {Character.highSurrogate(mysteryTrafficCodePoint), Character.lowSurrogate(mysteryTrafficCodePoint)};
         
         while(count<2){
             a = (int) Math.floor(Math.random() * 15);

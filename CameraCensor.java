@@ -162,6 +162,75 @@ public class CameraCensor{
 	            else{return true;}
 	        }
 	}
+	
+		public boolean isThereRedTrafficLight() {	
+		if(direction == 'e') {
+			for(int j = 0; j<= 4; j++) {
+			for(int i = 0; i <=4; i++) {
+				if(tempRoad[i][j] == 'R') {
+					return true;
+				}
+			}
+		}
+		}
+		else if (direction == 's') {
+			for(int i = 0; i <=4; i++) {
+				for(int j = 0; j <=4; j++) {
+					if(tempRoad[i][j] == 'R'){
+						return true;
+					}
+				}
+			}	
+		}
+		return false;
+	}
+	
+	public boolean isThereGreenTrafficLight() {
+		if(direction =='e') {
+			for(int j = 0; j<= 4; j++) {
+			for(int i = 0; i <=4 ; i++) {
+					if(tempRoad[i][j] == 'G') {
+						return true;
+					}
+				}
+			}
+		}
+		else if (direction == 's') {
+			for(int i = 0; i<=4;i++) {
+				for(int j = 0; j <=4; j++) {
+					if(tempRoad[i][j] == 'G'){
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	public boolean isThereParkingSign() {
+		if(direction =='e') {
+			for(int j = 0; j <5; j++) {
+				for(int i = 0; i <=4; i++) {
+					if(tempRoad[i][j]=='P') {
+						setObsRow(i);
+						return true;
+					}
+				}
+			}
+		}
+		else if(direction == 's') {
+			for(int i = 0; i <5; i++) {
+				for(int j = 0; j<5; j++) {
+					if(tempRoad[i][j]=='P') {
+						setObsCol(j);
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
 	public char[][] scanRoad(int x, int y){
         char[][] road = map.getRoad();
         char[][] temp = new char[5][5];

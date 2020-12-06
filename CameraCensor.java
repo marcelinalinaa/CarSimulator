@@ -14,7 +14,10 @@ public class CameraCensor{
 	public static final int censorRange = 3;
 	private HashMap<Coords, Character> obstacles = new HashMap<Coords, Character>();
 	private HashMap<Coords, Double> distance = new HashMap<Coords, Double>();
-
+	private char[][] tempRoad ;
+	private int obsCol;
+	private int obsRow;
+	
 	public CameraCensor(char direction){
 	map = new RoadMap();
 	this.direction = direction ;
@@ -61,7 +64,52 @@ public class CameraCensor{
 			}
 		}
 	}
+		
+	public boolean isThereAnyObstacleinFront(int x, int y){
+		tempRoad = scanRoad(x, y);	
+		if (direction == 'e'){
+			for(int j=0; j<5; j++){
+				if(tempRoad[2][j] == 'C'){
+					setObsCol(j);
+					return true;
+				}
+			}
+			return false;
+	            
+	    }
+	    else{ // direction to south
+			for(int i=0; i<5; i++){
+				if(tempRoad[i][2] == 'C'){
+	                return true;
+	            }
+			}
+			return false;
+		}          
+	}
 	
+	public void setObsCol(int j){
+		obsCol = j;
+	}
+	public int getObsCol(){
+		return this.obsCol;
+	}
+
+	public void setObsRow(int i){
+		obsRow = i;
+	}
+	public int getObsRow(){
+		return this.obsRow;
+	}
+
+	public boolean isPossibleToSlideLeft(){ //klo east aj ya
+	    if(tempRoad[1][0] != ' ')
+	        return false;
+	    else{
+	        if(tempRoad[1][getObsCol()] != ' ')
+	            return false;
+	            else{return true;}
+	        }
+	}
 	public char[][] scanRoad(int x, int y){
         char[][] road = map.getRoad();
         char[][] temp = new char[5][5];

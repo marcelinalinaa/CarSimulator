@@ -3,31 +3,21 @@ package carSimulator;
 import java.util.*;
 
 public class CameraCensor{
-	// private float x;
-	// private float y;
-	// private float x2;
-	//private float y2;
-	private float maxRange;
-	public boolean isVertical;
 	public RoadMap map;
-	public char direction;
 	public static final int censorRange = 3;
-	private HashMap<Coords, Character> obstacles = new HashMap<Coords, Character>();
-	private HashMap<Coords, Double> distance = new HashMap<Coords, Double>();
+	//private HashMap<Coords, Character> obstacles = new HashMap<Coords, Character>();
+	//private HashMap<Coords, Double> distance = new HashMap<Coords, Double>();
 	private char[][] tempRoad ;
 	private int obsCol;
 	private int obsRow;
-	
+
 	public CameraCensor(char direction){
 	map = new RoadMap();
-	this.direction = direction ;
-	this.obstacles = null;
-	this.distance = null;
+	//this.obstacles = null;
+	//this.distance = null;
+	this.tempRoad = null;
 	}
-
-	/*public void readMap(RoadMap road[][]) {
-	}
-	*/
+	
 	public void findObstacles(int x, int y){
 		char[][] road = map.getRoad();
 		obstacles = new HashMap<Coords, Character>(); //menyimpan koordinat untuk setiap obstacle (characteR)
@@ -65,60 +55,64 @@ public class CameraCensor{
 		}
 	}
 	
-	public char[][] scanRoad(int x, int y){
-        char[][] road = map.getRoad();
-        char[][] temp = new char[5][5];
-        if(direction == 'e') {
-            for(int i = y - 2; i <= y + 2; i++){
-                for(int j = x; j <= x + 4; j++){
-					if(i >= 0 && i < 15 || j >= 0 && j < 35){
+	public void doScanRoad(int x, int y, char direction){
+		tempRoad = scanRoad(x, y, direction);
+	}
+
+	public char[][] scanRoad(int y, int x, char direction){
+		char[][] road = map.getRoad();
+		char[][] temp = new char[5][5];
+		if(direction == 'e') {				//misal kita di (1,0)
+			for(int i = y - 2; i <= y + 2; i++){ //i = -2
+				for(int j = x; j <= x + 4; j++){  // j=1
+					if((i >= 0 && i < 15) && (j >= 0 && j < 35)){
+			
 						temp[i - y + 2][j - x] = road[i][j];
 					}
 					else {
 						temp[i - y + 2][j - x] = '0';
 					}
-                }
-            }
-        } else if(direction == 'w') {
-            for(int i = y - 2; i <= y + 2; i++){
-                for(int j = x; j >= x - 4; j--){
+				}
+			}
+		} else if(direction == 'w') {
+			for(int i = y - 2; i <= y + 2; i++){
+				for(int j = x; j >= x - 4; j--){
 					if(i >= 0 && i < 15 || j >= 0 && j < 35){
 						temp[i - y + 2][j - x + 4] = road[i][j];
 					}
 					else {
 						temp[i - y + 2][j - x + 4] = '0';
 					}
-                }
-            }
-        } else if(direction == 'n') {
-            for(int i = x - 2; i <= x + 2; i++){
-                for(int j = y; j <= y + 4; j++){
+				}
+			}
+		} else if(direction == 'n') {
+			for(int i = x - 2; i <= x + 2; i++){
+				for(int j = y; j <= y + 4; j++){
 					if(i >= 0 && i < 35 || j >= 0 && j < 15){
 						temp[i - x + 2][j - y] = road[i][j];
 					}
 					else {
 						temp[i - x + 2][j - y] = '0';
 					}
-                }
-            }
-        } else {
-            for(int i = x - 2; i <= x + 2; i++){
-                for(int j = y - 1; j >= y - 5; j--){
-                    if(i >= 0 && i < 35 || j >= 0 && j < 15){
+				}
+			}
+		} else {
+			for(int i = x - 2; i <= x + 2; i++){
+				for(int j = y - 1; j >= y - 5; j--){
+					if(i >= 0 && i < 35 || j >= 0 && j < 15){
 						temp[i - x + 2][j - y + 4] = road[i][j];
 					}
 					else {
 						temp[i - x + 2][j - y + 4] = '0';
 					}
-                }
-            }
+				}
+			}
 		}
 		
-        return temp;
-    }
+		return temp;
+	}
 		
-	public boolean isThereAnyObstacleinFront(int x, int y){
-		tempRoad = scanRoad(x, y);	
+	public boolean isThereAnyObstacleinFront(int x, int y, char direction){	
 		if (direction == 'e'){
 			for(int j=0; j<5; j++){
 				if(tempRoad[2][j] == 'C'){
@@ -126,18 +120,22 @@ public class CameraCensor{
 					return true;
 				}
 			}
+			setObsCol(0);
 			return false;
 	            
 	    }
 	    else{ // direction to south
 			for(int i=0; i<5; i++){
 				if(tempRoad[i][2] == 'C'){
+					setObsRow(i);
 	                return true;
 	            }
 			}
+			setObsRow(0);
 			return false;
 		}          
 	}
+	
 	
 	public void setObsCol(int j){
 		obsCol = j;
@@ -153,15 +151,47 @@ public class CameraCensor{
 		return this.obsRow;
 	}
 
-	public boolean isPossibleToSlideLeft(){ //klo east aj ya
-	    if(tempRoad[1][0] != ' ')
-	        return false;
-	    else{
-	        if(tempRoad[1][getObsCol()] != ' ')
-	            return false;
-	            else{return true;}
-	        }
+	public boolean isPossibleToSlideLeft (char direction) { 
+		if(direction == 'e'){		//cek jika mobil arah east
+			if(tempRoad[1][0] != ' ') //jika misalkan di sebelah kiri mobil ada sesuatu
+	        	return false;		 //  maka tidak mungkin belok
+			else{
+				if(tempRoad[1][getObsCol()] != ' ') // jika tidak, di cek apakah di sebelah kiri objek ada sesuatu
+					return false;					//jika iya maka tidak mungkin belok kiri
+				else{return true;}					//jika tidak, maka akan belok kiri 
+				}
+		}else{						//cek jika mobil arah south
+			if(tempRoad[0][3] != ' ') //jika misalkan di sebelah kiri mobil ada sesuatu
+	        	return false;		 //  maka tidak mungkin belok
+			else{
+				if(tempRoad[getObsRow()][3] != ' ') // jika tidak, di cek apakah di sebelah kiri objek ada sesuatu
+					return false;					//jika iya maka tidak mungkin belok kiri
+				else{return true;}					//jika tidak, maka akan belok kiri 
+				}
+		}  
 	}
+		
+	
+	public boolean isPossibleToSlideRight(char direction){
+			if(direction == 'e'){		//cek jika mobil arah east
+				if(tempRoad[3][0] != ' ') //jika misalkan di sebelah kanan mobil ada sesuatu
+					return false;		 //  maka tidak mungkin belok
+				else{
+					if(tempRoad[3][getObsCol()] != ' ') // jika tidak, di cek apakah di sebelah kanan objek ada sesuatu
+						return false;					//jika iya maka tidak mungkin belok kanan
+					else{return true;}					//jika tidak, maka akan belok kanan 
+					}
+			}else{						//cek jika mobil arah south
+				if(tempRoad[0][1] != ' ') //jika misalkan di sebelah kanan mobil ada sesuatu
+					return false;		 //  maka tidak mungkin belok
+				else{
+					if(tempRoad[getObsRow()][1] != ' ') // jika tidak, di cek apakah di sebelah kanan objek ada sesuatu
+						return false;					//jika iya maka tidak mungkin belok kanan
+					else{return true;}					//jika tidak, maka akan belok kanan
+					}
+			
+	        }
+	    }
 	
 		public boolean isPossibleToMoveDiagonallyToTheLeft() {
 		if(direction =='e') {

@@ -1,25 +1,18 @@
 package CarSimulator;
-
-//import java.util.ArrayList;
-//import java.util.List;
 import java.util.*;
 
-
 public class RoadMap {
-		
-//		private List<Coords> startingPoints = new ArrayList<Coords>();
-//		private Coords carStartingPoint = new Coords();
-		
 		int x, y;
 	    public static final int MAP_WIDTH = 35;
-	    public static final int MAP_HEIGHT = 15;
-	
-
+		public static final int MAP_HEIGHT = 15;
+		private int tLightX;
+		private int tLightY;
+											
 	    private char[][] road= {{'#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#' },
 	                            {' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ', ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
 	                            {' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ', ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
 	                            {' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ', ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
-	                            {'#','#','#','#','#','#','#','#','#','#','#','#','#','#',' ',' ',' ','#','#','#','#','#','#','#','#', '#','#','#','#','#','#','#','#','#','#','#'},
+	                            {'#','#','#','P','#','#','#','#','#','#','#','#','#','#',' ',' ',' ','#','#','#','#','#','#','#','#', '#','#','#','#','#','#','#','#','#','#','#'},
 	                            {'.','.','.','.','.','.','.','.','.','.','.','.','.','#',' ',' ',' ','#','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.'},
 	                            {'.','.','.','.','.','.','.','.','.','.','.','.','.','#',' ',' ',' ','#','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.'},
 	                            {'.','.','.','.','.','.','.','.','.','.','.','.','.','#',' ',' ',' ','#','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.'},
@@ -35,14 +28,13 @@ public class RoadMap {
 	
 	   public RoadMap(){
 		   setObstacleCone();
-		   setTrafficLight();
+		   setRedTrafficLight();
 		   setParkSignAndDestination();
 	   }
 		   
 	   public char[][] getRoad(){
 		     return road;
 	   }
-	   
 	   public void setParkSignAndDestination(){
 			int a,b;
 			int count = 0;
@@ -54,11 +46,7 @@ public class RoadMap {
 					b = MAP_WIDTH-1;		//kolom terakhir
 					if(road[a][b] == '#'){
 						road[a][b] = 'P';
-						if(a==0){
-							road[a+1][b] = 'X';
-						}
-						else{ road[a-1][b]= 'X';}
-					count++;
+						count++;
 					}
 				}
 			}
@@ -68,11 +56,7 @@ public class RoadMap {
 					b = getRandomInt(14, 19);		//kolom terakhir
 					if(road[a][b] == '#'){
 						road[a][b] = 'P';
-						if(b==14){
-							road[a][b+1] = 'X';
-						}
-						else{ road[a][b-1]= 'X';}
-					count++;
+						count++;
 					}
 				}
 			}
@@ -95,14 +79,13 @@ public class RoadMap {
 				}
 			}
 	   }
-	   public void setTrafficLight(){
-		   	int a,b;
+	   public void setRedTrafficLight(){
 			int count = 0;
 			while(count<1){
-				a = getRandomInt(0, MAP_HEIGHT);
-				b = getRandomInt(0, MAP_WIDTH);
-				if(road[a][b] == '#'){
-					road[a][b] = 'R';
+				tLightX = getRandomInt(0, MAP_HEIGHT);
+				tLightY = getRandomInt(0, MAP_WIDTH);
+				if(road[tLightX][tLightY] == '#'){
+					road[tLightX][tLightY] = 'R';
 				count++;
 				}
 			}
@@ -111,26 +94,14 @@ public class RoadMap {
 	   public void setPoint(int x,int y, char input){
 		   this.road[x][y] = input;
 	   }
-
-	   
-//	   public List<Coords> startingPoints() {
-//		
-//		   for(int i = 1; i<=8; i++) {
-//			   startingPoints.add(new Coords(i,0));
-//		   }
-//		   return startingPoints;
-//	   }
-//	   
-//	   public Coords getStartingPoint(int index) {
-//		  return startingPoints.get(index);
-//	   }
-//	   
-//	   public void setStartingPoint(int index) {
-//		  carStartingPoint = startingPoints.get(index);
-//	   }
-//	   
 		public int getRandomInt(int min, int max) {
 			return (int) Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
 		}
 	   
+		public void switchTrafficLight(int a){
+			if((a/3)%2 == 0)
+				setPoint(tLightX, tLightY, 'G');
+			else
+				setPoint(tLightX, tLightY, 'R');
+		}
 }

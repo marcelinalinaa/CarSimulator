@@ -1,3 +1,4 @@
+
 package CarSimulator;
 
 import java.util.*;
@@ -20,17 +21,20 @@ public class Main {
         */
         int count = 0;
         //belum di buat boolean destinasinya
-        while(count<10){
+        boolean jalan = true;
+        while(jalan){
             printMap();
-            // bikin toString di car yang begini ->
-            System.out.println("Car is driving on ("+car.getX()+", "+car.getY()+") axis and going to east direction.");
+            System.out.println(car.carPosition());
+            System.out.println(car.getCameraCensor().status());
             slowdown();
             clearScreen();
             map.setPoint(car.getX(), car.getY(), ' ');
-            car.action();
+            car.run1();
             map.setPoint(car.getX(), car.getY(), 'M');
-            count++;
+            map.switchTrafficLight(count++);
         }
+        printMap();
+        System.out.println("the simulation is done");
     }
     public static void printMap(){
     
@@ -47,7 +51,7 @@ public class Main {
        } 
     public static void slowdown(){
         try {
-            Thread.sleep(2000);
+            Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

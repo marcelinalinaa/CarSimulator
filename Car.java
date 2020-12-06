@@ -216,125 +216,123 @@ public class Car {
 	    HashMap<Coords, Double> distance = censor.getCoordsDistance(x,y);
 	    List<Coords> keyObstacle = new ArrayList<>(distance.keySet());
 	        if(direction == 'e') {
-	    	for(int i = 0; i<obstacles.size(); i++)
-	        {
-//	        	cek apakah ada cone, dan cone tsb sejajar dgn jalur mobil (pas d dpnnya)
-	        	if(obstacles.get(keyObstacle.get(i)) == 'C' && x == keyObstacle.get(i).getCoordsX()) {
-//	        		cek apakah ada sesuatu di sebelah mobil
-	        		for(int j = 0; j < obstacles.size();j++) {
-//	        		kalau misalnya cone sejajar (dalam column) dgn mobil	
-	        			if(keyObstacle.get(j).getCoordsY() == y) {
-	        				// cek serong depan kiri mobil, jika mobil menghadap ke east
-	        				if(keyObstacle.get(j).getCoordsX() == x-1 && keyObstacle.get(j).getCoordsY() == y+1 ) {
-//	        				cek serong depan kanannya mobil
-	        					if(keyObstacle.get(j).getCoordsX() == x+1 && keyObstacle.get(j).getCoordsY() == y+1 ) {
-//	        					karena serong kiri kanan ada, makanya stop
-									pedals.decelerateToN(0);
-									break;
-	        					}
-//	        				kalo misal gada dikanan, kita kekanan
-	        					else {
+			check : {
+				for(int i = 0; i<obstacles.size(); i++)
+				{
+	//	        	cek apakah ada cone, dan cone tsb sejajar dgn jalur mobil (pas d dpnnya)
+					if(obstacles.get(keyObstacle.get(i)) == 'C' && x == keyObstacle.get(i).getCoordsX()) {
+	//	        		cek apakah ada sesuatu di sebelah mobil
+						for(int j = 0; j < obstacles.size();j++) {
+	//	        		kalau misalnya cone sejajar (dalam column) dgn mobil	
+							if(keyObstacle.get(j).getCoordsY() == y) {
+								// cek serong depan kiri mobil, jika mobil menghadap ke east
+								if(keyObstacle.get(j).getCoordsX() == x-1 && keyObstacle.get(j).getCoordsY() == y+1 ) {
+	//	        				cek serong depan kanannya mobil
+									if(keyObstacle.get(j).getCoordsX() == x+1 && keyObstacle.get(j).getCoordsY() == y+1 ) {
+	//	        					karena serong kiri kanan ada, makanya stop
+										pedals.decelerateToN(0);
+										break check;
+									}
+	//	        				kalo misal gada dikanan, kita kekanan
+									else {
+										moveDiagonallyToTheRight();
+										break check;
+									}
+								}
+								else {
+									moveDiagonallyToTheLeft();
+									break check;
+								}
+								}
+							}
+						}
+	//	        	kalau misal mobil ud sejajar sm rambu merah, dia hrs stop (ini buat east)
+					else if(obstacles.get(keyObstacle.get(i)) == 'R' && y== keyObstacle.get(i).getCoordsY() ){
+						pedals.decelerateToN(0);
+						break check;
+					}
+	//	        	kalau misal mobil ud sejajar sm rambu merah, dia hrs stop (ini ke south)
+					else if(obstacles.get(keyObstacle.get(i)) == 'R' && x== keyObstacle.get(i).getCoordsX() ){
+						pedals.decelerateToN(0);
+						break check;
+					}
+					else if(obstacles.get(keyObstacle.get(i)) == 'G') {
+						moveForward();
+						break check;
+					}
+					else if(obstacles.get(keyObstacle.get(i)) == 'P' ) {
+						int obs_x = keyObstacle.get(i).getCoordsX();
+						int obs_y = keyObstacle.get(i).getCoordsY();
+						if(x > obs_x) {
+							for(int j = 0; j < obstacles.size();j++) {
+	//	    	        		cek serong depan kanannya mobil
+								if(keyObstacle.get(j).getCoordsX() == x+1 && keyObstacle.get(j).getCoordsY() == y+1 ) {
+									moveForward();
+									break check;
+								}
+							}
+							//kalo misal gada dikanan, kita kekanan
+							moveDiagonallyToTheRight();
+							break check;
+						}	
+	//	        			else if(direction =='w') {
+	//	        				while(x!=obs_x+1 && y!= obs_y) {
+	//		        				moveDiagonallyToTheRight();
+	//		        			}
+	//	        			}
+						else if(x < obs_x) {
+							for(int j = 0; j < obstacles.size();j++) {
+							// cek serong depan kiri mobil, jika mobil menghadap ke east
+								if(keyObstacle.get(j).getCoordsX() == x-1 && keyObstacle.get(j).getCoordsY() == y+1 ) {
+									moveForward();
+									break check;    	        		
+								}
+							}
+							//kalo misal gada di serong kiri dpn, kita ke serong kiri
+							moveDiagonallyToTheLeft();
+							break check;				
+						}
+	//	        			else if(direction =='w') {
+	//	        				while(x!=obs_x-1 && y!= obs_y) {
+	//		        				moveDiagonallyToTheLeft();
+	//		        			}
+	//	        			}
+						else if(y<obs_y) {
+							if(direction =='s') {
+								while(x!=obs_x && y!= obs_y-1) {
+									moveDiagonallyToTheLeft();
+									break check;
+								}
+							}
+							else if(direction =='n') {
+								while(x!=obs_x && y!= obs_y-1) {
 									moveDiagonallyToTheRight();
-									break;
-	        					}
-	        				}
-	        				else {
-								moveDiagonallyToTheLeft();
-								break;
-	        				}
-	        				}
-	        			}
-	        		}
-//	        	kalau misal mobil ud sejajar sm rambu merah, dia hrs stop (ini buat east)
-	        	else if(obstacles.get(keyObstacle.get(i)) == 'R' && y== keyObstacle.get(i).getCoordsY() ){
-					pedals.decelerateToN(0);
-					break;
-	        	}
-//	        	kalau misal mobil ud sejajar sm rambu merah, dia hrs stop (ini ke south)
-	        	else if(obstacles.get(keyObstacle.get(i)) == 'R' && x== keyObstacle.get(i).getCoordsX() ){
-					pedals.decelerateToN(0);
-					break;
-	        	}
-	        	else if(obstacles.get(keyObstacle.get(i)) == 'G') {
-					moveForward();
-					break;
-	        	}
-	        	else if(obstacles.get(keyObstacle.get(i)) == 'P' ) {
-	        		int obs_x = keyObstacle.get(i).getCoordsX();
-	        		int obs_y = keyObstacle.get(i).getCoordsY();
-	        		if(x > obs_x) {
-	        			for(int j = 0; j < obstacles.size();j++) {
-//	    	        		cek serong depan kanannya mobil
-	    	        		if(keyObstacle.get(j).getCoordsX() == x+1 && keyObstacle.get(j).getCoordsY() == y+1 ) {
-								moveForward();
-								break;
-	    	        		}
-//	    	        		kalo misal gada dikanan, kita kekanan
-	    	        		else {
-								moveDiagonallyToTheRight();
-								break;
-	    	        		}
-	    	        	}		
-	    	        }
-     			
-//	        			else if(direction =='w') {
-//	        				while(x!=obs_x+1 && y!= obs_y) {
-//		        				moveDiagonallyToTheRight();
-//		        			}
-//	        			}
-	        		else if(x < obs_x) {
-	        			for(int j = 0; j < obstacles.size();j++) {
-	    	        	// cek serong depan kiri mobil, jika mobil menghadap ke east
-	    	        		if(keyObstacle.get(j).getCoordsX() == x-1 && keyObstacle.get(j).getCoordsY() == y+1 ) {
-								moveForward();
-								break;
-	    	        		}
-//	    	        		kalo misal gada di serong kiri dpn, kita ke serong kiri
-	    	        		else {
-								moveDiagonallyToTheLeft();
-								break;
-	    	        		}
-	    	        	}				
-	        		}
-//	        			else if(direction =='w') {
-//	        				while(x!=obs_x-1 && y!= obs_y) {
-//		        				moveDiagonallyToTheLeft();
-//		        			}
-//	        			}
-	        		else if(y<obs_y) {
-	        			if(direction =='s') {
-		        			while(x!=obs_x && y!= obs_y-1) {
-								moveDiagonallyToTheLeft();
-								break;
-		        			}
-	        			}
-	        			else if(direction =='n') {
-	        				while(x!=obs_x && y!= obs_y-1) {
-								moveDiagonallyToTheRight();
-								break;
-		        			}
-	        			}
-	        		}
-	        		else {
-	        			if(direction =='s') {
-		        			while(x!=obs_x && y!= obs_y+1) {
-								moveDiagonallyToTheRight();
-								break;
-		        			}
-	        			}
-	        			else if(direction =='n') {
-	        				while(x!=obs_x && y!= obs_y+1) {
-								moveDiagonallyToTheLeft();
-								break;
-		        			}
-	        			}
-	        		}
+									break check;
+								}
+							}
+						}
+						else {
+							if(direction =='s') {
+								while(x!=obs_x && y!= obs_y+1) {
+									moveDiagonallyToTheRight();
+									break check;
+								}
+							}
+							else if(direction =='n') {
+								while(x!=obs_x && y!= obs_y+1) {
+									moveDiagonallyToTheLeft();
+									break check;
+								}
+							}
+						}
+					}
+								
+	//	        	else if(obstacles.get(keyObstacle.get(i)) == 'S') {
+	//	        		//ask do u want to stop? if yes, stop. if not, keep moving
+	//	        	}
 				}
-				        	
-//	        	else if(obstacles.get(keyObstacle.get(i)) == 'S') {
-//	        		//ask do u want to stop? if yes, stop. if not, keep moving
-//	        	}
-	        }
+			}
+	    	
 	      }
 		  moveForward();
 	}

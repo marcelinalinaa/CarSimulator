@@ -166,40 +166,7 @@ public class CameraCensor{
 		return maxRange;
 	}
 	
-	   public boolean isThereAnyObstacleinFront(int x, int y){
-	        if (direction == 'e'){
-	            if(map.getPoint(x+1, y) != ' '){
-	                return false;
-	            }
-	            else{ return true;}
-	        }
-	        else{
-	            if(map.getPoint(x, y-1) != ' '){
-	                return false;
-	            }
-	            else{ return true;}
-	        }
-	    }    
-
-	    public boolean isPossibleToSlideLeft(int x, int y){ //klo east aj ya
-	        if(map.getPoint(x+1, y+1) != ' ')
-	            return false;
-	        else{
-	            if(map.getPoint(x, y+1) != ' ')
-	                return false;
-	            else{return true;}
-	        }
-	    }
-	    public boolean isPossibleToSlideRight(int x, int y){       //kalo east aja ya
-	        if(map.getPoint(x+1, y-1) != ' ')
-	            return false;
-	        else{
-	            if(map.getPoint(x, y-1) != ' ')
-	                return false;
-	            else{return true;}
-	        }
-	    }
-
+	  
 
 	   // function to sort hashmap by values 
 	   public static HashMap<Coords, Double> sortByValue(HashMap<Coords, Double> hm){ 

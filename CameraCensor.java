@@ -64,6 +64,58 @@ public class CameraCensor{
 			}
 		}
 	}
+	
+	public char[][] scanRoad(int x, int y){
+        char[][] road = map.getRoad();
+        char[][] temp = new char[5][5];
+        if(direction == 'e') {
+            for(int i = y - 2; i <= y + 2; i++){
+                for(int j = x; j <= x + 4; j++){
+					if(i >= 0 && i < 15 || j >= 0 && j < 35){
+						temp[i - y + 2][j - x] = road[i][j];
+					}
+					else {
+						temp[i - y + 2][j - x] = '0';
+					}
+                }
+            }
+        } else if(direction == 'w') {
+            for(int i = y - 2; i <= y + 2; i++){
+                for(int j = x; j >= x - 4; j--){
+					if(i >= 0 && i < 15 || j >= 0 && j < 35){
+						temp[i - y + 2][j - x + 4] = road[i][j];
+					}
+					else {
+						temp[i - y + 2][j - x + 4] = '0';
+					}
+                }
+            }
+        } else if(direction == 'n') {
+            for(int i = x - 2; i <= x + 2; i++){
+                for(int j = y; j <= y + 4; j++){
+					if(i >= 0 && i < 35 || j >= 0 && j < 15){
+						temp[i - x + 2][j - y] = road[i][j];
+					}
+					else {
+						temp[i - x + 2][j - y] = '0';
+					}
+                }
+            }
+        } else {
+            for(int i = x - 2; i <= x + 2; i++){
+                for(int j = y - 1; j >= y - 5; j--){
+                    if(i >= 0 && i < 35 || j >= 0 && j < 15){
+						temp[i - x + 2][j - y + 4] = road[i][j];
+					}
+					else {
+						temp[i - x + 2][j - y + 4] = '0';
+					}
+                }
+            }
+		}
+		
+        return temp;
+    }
 		
 	public boolean isThereAnyObstacleinFront(int x, int y){
 		tempRoad = scanRoad(x, y);	

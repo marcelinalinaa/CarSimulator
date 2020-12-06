@@ -27,18 +27,18 @@ public class CameraCensor{
 	*/
 	public void findObstacles(int x, int y){
 		char[][] road = map.getRoad();
-		obstacles = new HashMap<Coords, Character>();
-		distance = new HashMap<Coords, Double>();
+		obstacles = new HashMap<Coords, Character>(); //menyimpan koordinat untuk setiap obstacle (characteR)
+		distance = new HashMap<Coords, Double>(); // menyimpan koordinat untuk setiap obstacle, dan jaraknya terhadap mobil
 		if(direction == 'e') {
 			//alur iterasinya, untuk setiap kolom, akan di cek setiap barisnya
 			for(int j = y; j<=y+censorRange; j++) {
+				//if out of bound (column), then break (do not need to check next column)
+				if(j > RoadMap.MAP_WIDTH)
+					break;
 				for(int i = x-censorRange; i <= x+censorRange; i++) {
 					//if out of bound (top row), then next iteration
 					if(i < 0)
 						continue;
-					//if out of bound (column), then break (do not need to check next column)
-					if(j > RoadMap.MAP_WIDTH)
-						break;
 					if(road[i][j] != ' ' && road[i][j] != '.') {
 						obstacles.put(new Coords(i,j), road[i][j]);
 						distance.put(new Coords(i,j), calculateDistance(x, y, i, j));
@@ -49,10 +49,10 @@ public class CameraCensor{
 		else if( direction == 's') {
 			//alur iterasinya, untuk setiap baris, akan dicek setiap kolomnya
 			for(int i = x; i < x+censorRange; i++) {
+				// if out of bound (bottom row), then break ( do not neet to check next row)
+				if(i>=RoadMap.MAP_HEIGHT)
+					break;
 				for(int j = y-censorRange; j<= y+censorRange; y++) {
-					// if out of bound (bottom row), then next iteration
-					if(i>=RoadMap.MAP_HEIGHT)
-						break;
 					if(road[i][j] != ' ' && road[i][j] != '.') {
 						obstacles.put(new Coords(i,j), road[i][j]);
 						distance.put(new Coords(i,j), calculateDistance(x, y, i, j));
@@ -61,7 +61,6 @@ public class CameraCensor{
 			}
 		}
 	}
-	
 	public HashMap<Coords, Character> getObstacles(int x, int y){
 		findObstacles(x, y);
 		return this.obstacles;

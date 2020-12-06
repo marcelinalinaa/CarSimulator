@@ -61,6 +61,38 @@ public class CameraCensor{
 			}
 		}
 	}
+	
+	public char[][] scanRoad(int x, int y){
+        char[][] road = map.getRoad();
+        char[][] temp = new char[5][5];
+        if(direction == 'e') {
+            for(int i = y - 2; i <= y + 2; i++){
+                for(int j = x + 1; j <= x + 5; j++){
+					temp[i - y + 2][j - x - 1] = road[i][j];
+                }
+            }
+        } else if(direction == 'w') {
+            for(int i = y - 2; i <= y + 2; i++){
+                for(int j = x - 1; j >= x - 5; j--){
+                    temp[i - y + 2][j - x + 5] = road[i][j];
+                }
+            }
+        } else if(direction == 'n') {
+            for(int i = x - 2; i <= x + 2; i++){
+                for(int j = y + 1; j <= y + 5; j++){
+                    temp[i - x + 2][j - y - 1] = road[i][j];
+                }
+            }
+        } else {
+            for(int i = x - 2; i <= x + 2; i++){
+                for(int j = y - 1; j >= y - 5; j--){
+                    temp[i - x + 2][j - y + 5] = road[i][j];
+                }
+            }
+        }
+        return temp;
+    }
+	
 	public HashMap<Coords, Character> getObstacles(int x, int y){
 		findObstacles(x, y);
 		return this.obstacles;

@@ -163,11 +163,41 @@ public class CameraCensor{
 	        }
 	}
 	
-		public boolean isThereRedTrafficLight() {	
+		public boolean isPossibleToMoveDiagonallyToTheLeft() {
+		if(direction =='e') {
+			if(tempRoad[1][1] == ' ') {
+				return true;
+			}
+		}
+		else if(direction =='s') {
+//			ini bayanginnya kyk east cmn posisi car itu ada di (0,2)
+			if(tempRoad[1][3] == ' ') {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean isPossibleToMoveDiagonallyToTheRight() {
+		if(direction =='e') {
+			if(tempRoad[3][1] == ' ') {
+				return true;
+			}
+		}
+		else if(direction =='s') {
+			if(tempRoad[1][1] == ' ') {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean isThereRedTrafficLight() {	
 		if(direction == 'e') {
 			for(int j = 0; j<= 4; j++) {
 			for(int i = 0; i <=4; i++) {
 				if(tempRoad[i][j] == 'R') {
+					setObsCol(j);
 					return true;
 				}
 			}
@@ -177,6 +207,7 @@ public class CameraCensor{
 			for(int i = 0; i <=4; i++) {
 				for(int j = 0; j <=4; j++) {
 					if(tempRoad[i][j] == 'R'){
+						setObsRow(i);
 						return true;
 					}
 				}
@@ -213,6 +244,7 @@ public class CameraCensor{
 				for(int i = 0; i <=4; i++) {
 					if(tempRoad[i][j]=='P') {
 						setObsRow(i);
+						setObsCol(j);
 						return true;
 					}
 				}
@@ -222,6 +254,7 @@ public class CameraCensor{
 			for(int i = 0; i <5; i++) {
 				for(int j = 0; j<5; j++) {
 					if(tempRoad[i][j]=='P') {
+						setObsRow(i);
 						setObsCol(j);
 						return true;
 					}

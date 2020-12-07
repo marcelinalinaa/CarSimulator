@@ -8,62 +8,42 @@ public class CameraCensor{
 	private int obsRow;
 	private boolean redTrafficLight = false;
 	private boolean greenTrafficLight = false;
-	public boolean parkingSignOnTheLeft = false;
+	private boolean parkingSignOnTheLeft = false;
 	private boolean parkingSignOnTheRight = false;
+	// update
+	private boolean leftTurnSign = false;
+	private boolean rightTurnSign = false;
 	private boolean obstacleInFront = false;
 
 	public CameraCensor(){
-	map = new RoadMap();
-	this.tempRoad = null;
+		map = new RoadMap();
+		this.tempRoad = null;
 	}
-	public void doScanRoad(int x, int y, char direction){
-		tempRoad = scanRoad(x, y, direction);
+	public void doScanRoad(int row, int col, char direction){
+		tempRoad = scanRoad(row, col, direction);
 	}
-	public char[][] scanRoad(int y, int x, char direction){ // parameter x dan y jadi diubah
+	public char[][] scanRoad(int row, int col, char direction){ // parameter x dan y jadi diubah
 		char[][] road = map.getRoad();
-		char[][] temp = new char[5][5];
+		char[][] temp = new char[7][7];
 		if(direction == 'e') {				
-			for(int i = y - 2; i <= y + 2; i++){ 
-				for(int j = x; j <= x + 4; j++){ 
-					if((i >= 0 && i < 15) && (j >= 0 && j < 35)){
-			
-						temp[i - y + 2][j - x] = road[i][j];
+			for(int i = row - 3; i <= row + 3; i++){ 
+				for(int j = col; j <= col + 6; j++){ 
+					if((i >= 0 && i < RoadMap.MAP_HEIGHT) && (j >= 0 && j < RoadMap.MAP_WIDTH)){
+						temp[i - row + 3][j - col] = road[i][j];
 					}
 					else {
-						temp[i - y + 2][j - x] = '0';
+						temp[i - row + 3][j - col] = '0';
 					}
 				}
 			}
-		} else if(direction == 'w') {
-			for(int i = y - 2; i <= y + 2; i++){
-				for(int j = x; j >= x - 4; j--){
-					if(i >= 0 && i < 15 || j >= 0 && j < 35){
-						temp[i - y + 2][j - x + 4] = road[i][j];
+		} else if(direction == 's'){
+			for(int i = col - 3; i <= col + 3; i++){
+				for(int j = row; j >= row + 6; j++){
+					if(i >= 0 && i < RoadMap.MAP_WIDTH && j >= 0 && j < RoadMap.MAP_HEIGHT){
+						temp[i - col + 3][j - row] = road[i][j];
 					}
 					else {
-						temp[i - y + 2][j - x + 4] = '0';
-					}
-				}
-			}
-		} else if(direction == 'n') {
-			for(int i = x - 2; i <= x + 2; i++){
-				for(int j = y; j <= y + 4; j++){
-					if(i >= 0 && i < 35 || j >= 0 && j < 15){
-						temp[i - x + 2][j - y] = road[i][j];
-					}
-					else {
-						temp[i - x + 2][j - y] = '0';
-					}
-				}
-			}
-		} else {
-			for(int i = x - 2; i <= x + 2; i++){
-				for(int j = y - 1; j >= y - 5; j--){
-					if(i >= 0 && i < 35 || j >= 0 && j < 15){
-						temp[i - x + 2][j - y + 4] = road[i][j];
-					}
-					else {
-						temp[i - x + 2][j - y + 4] = '0';
+						temp[i - col + 3][j - row] = '0';
 					}
 				}
 			}
@@ -73,25 +53,19 @@ public class CameraCensor{
 	}
 
 	public boolean isThereAnyObstacleinFront(int x, int y, char direction){	
+		obstacleInFront = false;
 		if (direction == 'e'){
-			for(int j=0; j<7; j++){
-				if(tempRoad[3][j] == 'C'){
-					setObsCol(j);
-					obstacleInFront = true;
-				}
+			if(tempRoad[3][1] == 'C'){
+				setObsCol(1);
+				obstacleInFront = true;
 			}
-			obstacleInFront = false; 
-	    }
-	    else{ // direction to south
-			for(int i=0; i<7; i++){
-				if(tempRoad[i][3] == 'C'){
-					setObsRow(i);
-	                obstacleInFront = true;
-	            }
+		} else if(direction == 's'){ // direction to south
+			if(tempRoad[1][3] == 'C'){
+				setObsRow(1);
+				obstacleInFront = true;
 			}
-			obstacleInFront = false;
-		} 
-		return obstacleInFront;         
+		} else { obstacleInFront = false; }
+		return obstacleInFront;     
 	}
 	
 	public void setObsCol(int j){
@@ -152,6 +126,7 @@ public class CameraCensor{
 	    }
 
 		public boolean isThereRedTrafficLight(char direction) {	
+			redTrafficLight = false;
 			if(direction == 'e') {
 				for(int j = 0; j< 7; j++) {
 					for(int i = 0; i < 7; i++) {
@@ -178,9 +153,10 @@ public class CameraCensor{
 		}
 		
 		public boolean isThereGreenTrafficLight(char direction) {
+			greenTrafficLight = false;
 			if(direction =='e') {
 				for(int j = 0; j< 7; j++) {
-				for(int i = 0; i < 7 ; i++) {
+					for(int i = 0; i < 7 ; i++) {
 						if(tempRoad[i][j] == 'G') {
 							greenTrafficLight = true;
 						}
@@ -202,6 +178,7 @@ public class CameraCensor{
 
 
 		public boolean isThereParkingSignOnTheLeft(char direction) {
+			parkingSignOnTheLeft = false;
 			if(direction =='e') {
 			 for(int j = 0; j <7; j++) {
 			  for(int i = 0; i <4; i++) {
@@ -229,6 +206,7 @@ public class CameraCensor{
 		   }
 		   
 		public boolean isThereParkingSignOnTheRight(char direction) {
+			parkingSignOnTheRight = false;
 			if(direction =='e') {
 			 for(int j = 0; j <7; j++) {
 			  for(int i = 3; i <7; i++) {
@@ -254,6 +232,62 @@ public class CameraCensor{
 			else parkingSignOnTheRight = false;
 			return parkingSignOnTheRight;
 		   }
+
+		// update
+		public boolean isThereRightTurnSign(char direction){
+			rightTurnSign = false;
+			if(direction =='e') {
+				for(int j = 0; j <7; j++) {
+					for(int i = 0; i <7; i++) {
+						if(tempRoad[i][j]=='>') {
+							setObsRow(i);
+					   		setObsCol(j);
+				   			rightTurnSign = true;
+				  		}
+				 	}
+				}
+			} else if(direction == 's') {
+				for(int i = 0; i <7; i++) {
+					for(int j = 0; j<7; j++) {
+						if(tempRoad[i][j]=='>') {
+							setObsRow(i);
+							setObsCol(j);
+							rightTurnSign = true;
+						}
+					}
+				}
+			} else rightTurnSign = false;
+			return rightTurnSign;
+		}
+
+		// update
+		public boolean isThereLeftTurnSign(char direction) {
+			leftTurnSign = false;
+			if(direction =='e') {
+				for(int j = 0; j <7; j++) {
+					for(int i = 0; i < 7; i++) {
+						if(tempRoad[i][j]=='<') {
+							setObsRow(i);
+							setObsCol(j);
+							leftTurnSign = true;
+						}
+					}
+				}
+			} else if(direction == 's') {
+				for(int i = 0; i <7; i++) {
+					for(int j = 0; j<7; j++) {
+						if(tempRoad[i][j]=='<') {
+							setObsRow(i);
+							setObsCol(j);
+							leftTurnSign = true;
+						}
+					}
+				}
+			}
+			else leftTurnSign = false;
+			return leftTurnSign;
+		}
+
 			public boolean reachedDestination(char direction){
 				if(direction =='e') {
 					if(getObsRow() < 3){
@@ -282,48 +316,6 @@ public class CameraCensor{
 				}
 				return false;
 			}
-
-
-/*	
-	//dari eric 22:50
-	public void findTurns(RoadMap road){
-	    boolean[][] temp = censor.findRoad(x, y);
-        if(direction == 'e') {
-            for(int i = 4; i >= 0; i--){
-                if(temp[0][i] && temp[1][i]){
-                    setLeftTurn(i + 1);
-                } else if(temp[3][i] && temp[4][i]){
-                    setRightTurn(i + 1);
-                }
-            }
-        } else if(direction == 'w') {
-            for(int i = 0; i <= 4; i++){
-				if(temp[3][i] && temp[4][i]){
-                    setLeftTurn(5 - i);
-                } else if(temp[0][i] && temp[1][i]){
-                    setRightTurn(5 - i);
-                }
-			}
-        } else if(direction == 'n') {
-            for(int i = 0; i <= 4; i++){
-				if(temp[i][0] && temp [i][1]){
-					setLeftTurn(5 - i);
-				} else if(temp[i][3] && temp[i][4]){
-					setRightTurn(5 - i);
-				}
-			}
-        } else {
-            for(int i = 4; i >= 0; i++){
-				if(temp[i][3] && temp[i][4]){
-					setLeftTurn(i + 1);
-				} else if(temp[i][0] && temp[i][1]){
-					setRightTurn(i + 1);
-				}
-			}
-        }
-	}	
-
-*/
 
 	public String status(){
 		if(redTrafficLight)

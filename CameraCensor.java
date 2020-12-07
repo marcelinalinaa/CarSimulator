@@ -15,7 +15,9 @@ public class CameraCensor extends Censor{
 	public CameraCensor(){
 		map = Main.getMap();
 		this.tempRoad = null;
+		setName("CameraCensor");
 	}
+	
 	public void doScanRoad(int row, int col, String direction){
 		tempRoad = scan(row, col, direction);
 	}

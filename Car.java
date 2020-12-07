@@ -57,11 +57,11 @@ public class Car {
 				moveDiagonallyToTheRight();
 				return true;
 			}
-			else if(censor.isPossibleMovetoTheLeft(direction)){
+			else if(censor.isPossibleMoveToTheLeft(direction)){
 				moveLeft();
 				return true;
 			} 
-			else if(censor.isPossibleMovetoTheRight(direction)){
+			else if(censor.isPossibleMoveToTheRight(direction)){
 				moveRight();
 				return true;
 			}
@@ -80,7 +80,7 @@ public class Car {
 						moveDiagonallyToTheLeft();
 						return true;
 					}
-					if(censor.isPossibleMovetoTheLeft(direction)){
+					if(censor.isPossibleMoveToTheLeft(direction)){
 						moveLeft();
 						return true;
 					}
@@ -96,7 +96,7 @@ public class Car {
 					moveDiagonallyToTheRight();
 					return true;
 				}
-				if(censor.isPossibleMovetoTheRight(direction)){
+				if(censor.isPossibleMoveToTheRight(direction)){
 					moveRight();
 					return true;
 				}

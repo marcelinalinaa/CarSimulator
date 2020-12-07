@@ -1,9 +1,8 @@
 package CarSimulator;
 
 public class Speedometer {
-        int speed;
+        private int speed;
         private int miles;
-        
         public static final int MAX_SPEED = 200;
         
         public Speedometer() {

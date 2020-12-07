@@ -17,7 +17,7 @@ public class CameraCensor extends Censor{
 		this.tempRoad = null;
 		setName("CameraCensor");
 	}
-	
+
 	public void doScanRoad(int row, int col, String direction){
 		tempRoad = scan(row, col, direction);
 	}
@@ -91,7 +91,7 @@ public class CameraCensor extends Censor{
 			return false;
 	    }
 
-	public boolean isPossibleMovetoTheLeft(String direction){
+	public boolean isPossibleMoveToTheLeft(String direction){
 		if(direction.equals("e")){
 			if(tempRoad[2][0] != ' ') //jika misalkan di sebelah kiri mobil ada sesuatu
 				return false;
@@ -100,7 +100,7 @@ public class CameraCensor extends Censor{
 		return false;		
 	} 
 
-	public boolean isPossibleMovetoTheRight(String direction){
+	public boolean isPossibleMoveToTheRight(String direction){
 		if(direction.equals("e")){
 			if(tempRoad[4][0] != ' ') //jika misalkan di sebelah kanan mobil ada sesuatu
 				return false;		 //  maka tidak mungkin belok

@@ -21,7 +21,7 @@ public class Main {
         map.printMap();
         System.out.println("The simulation is done.");
     }
-     
+
     public static void slowdown(){
         try {
             Thread.sleep(500);

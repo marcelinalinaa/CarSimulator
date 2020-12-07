@@ -62,11 +62,8 @@ public class Car {
 				decelerateToN(0);
 				return true;
 			}
-			else
-				moveForward();
-				return true;
 		}
-		else if(censor.isThereAnyObstacleinFront(x, y, direction)){
+		if(censor.isThereAnyObstacleinFront(x, y, direction)){
 			if(censor.isPossibleToMoveDiagonallyToTheLeft(direction)==true){
 				moveDiagonallyToTheLeft();
 				return true;	
@@ -79,7 +76,7 @@ public class Car {
 				decelerateToN(0);
 				return false;} //game over, karena sudah tidak bisa belok kemanapun
 		}
-		else if (censor.isThereParkingSignOnTheLeft(direction)){
+		if (censor.isThereParkingSignOnTheLeft(direction)){
 			if(censor.reachedDestination(direction)){
 				decelerateToN(0);
 				return false;
@@ -90,11 +87,7 @@ public class Car {
 						moveDiagonallyToTheLeft();
 						return true;
 					}
-					//kalo misal ada obstacle dikiri, kita maju lurus
-					else {
-						moveForward();
-						return true;
-					}
+					//kalo misal ada obstacle dikiri, lanjut
 				}
 		}
 		else if (censor.isThereParkingSignOnTheRight(direction)){
@@ -107,19 +100,25 @@ public class Car {
 					moveDiagonallyToTheRight();
 					return true;
 				}
-				else{
-					moveForward();
-					return true;
-				}
 			}	
 		}				
 			//else if //apakah bisa geser kanan
 			//else if//apakah bisa geser kiri
-		else if (censor.isThereGreenTrafficLight(direction)){
+		if (censor.isThereGreenTrafficLight(direction)){
 			accelerateToN(10);
-			moveForward();
-			return true;
-		}		
+		} 
+		// update
+		if(censor.isThereLeftTurnSign(direction)){
+			if(censor.getObsCol() == 0){
+				turnLeft();
+				return true;
+			}
+		} else if(censor.isThereRightTurnSign(direction)){
+			if(censor.getObsCol() == 0){
+				turnRight();
+				return true;
+			}
+		}
 		moveForward();
 		return true;
 	}
@@ -138,7 +137,19 @@ public class Car {
 			temp_x = temp_x + (int)(speedometer.getSpeed()/10);
 		}
 		setCoords(temp_x, temp_y);
-    }
+	}
+	
+	public void turnRight(){
+		if(direction == 'e'){
+			direction = 's';
+		} else if(direction == 'n'){
+			direction = 'e';
+		} else if(direction == 'w'){
+			direction = 'n';
+		} else {
+			direction = 'w';
+		}
+	}
 
 	public void moveRight(){
 		int temp_x = getX();
@@ -162,16 +173,14 @@ public class Car {
 	}
 
 	public void turnLeft(){
-		if(getLeftTurn() == 0){
-			if(direction == 'e'){
-				direction = 'n';
-			} else if(direction == 'n'){
-				direction = 'w';
-			} else if(direction == 'w'){
-				direction = 's';
-			} else {
-				direction = 'w';
-			}
+		if(direction == 'e'){
+			direction = 'n';
+		} else if(direction == 'n'){
+			direction = 'w';
+		} else if(direction == 'w'){
+			direction = 's';
+		} else {
+			direction = 'e';
 		}
 	}
 
@@ -270,36 +279,6 @@ public class Car {
 
 	public void setLeftTurn(int l){
 	    whenLeftTurn = l;
-	}
-//
-//	public void findTurns(){
-//		 boolean[][] temp = censor.findRoad(x, y);
-//	        if(direction == 'e') {
-//	            for(int i = 3; i >= 0; i--){
-//	                if(temp[0][i] && temp[1][i]){
-//	                    setLeftTurn(i + 1);
-//	                } else if(temp[3][i] && temp[4][i]){
-//	                    setRightTurn(i + 1);
-//	                }
-//	            }
-//	        } else if(direction == 'w') {
-//	            ;
-//	        } else if(direction == 'n') {
-//	            ;
-//	        } else {
-//	            ;
-//	        }
-//	}
-
-	public void accelerate(int n){
-	    for(int i = 1; i < n; i++){
-	        if(speedometer.getSpeed() < Speedometer.MAX_SPEED){
-	            speedometer.setSpeed(speedometer.getSpeed() + 1);
-	        } else { 
-	            speedometer.setSpeed(200);
-	            break;
-	        }
-	    }
 	}
 
 	public void accelerateToN(int n){

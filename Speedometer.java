@@ -32,15 +32,13 @@ public class Speedometer {
          this.miles = miles;
         }
         
-        public String displaySpeed() {
-            return "Your car's current speed is" + this.getSpeed() + "km/ h";
+        public String status() {
+            return "Your car's current speed is " + this.speed + " mph and have traveled " + this.miles + " miles";
         }
 
-    /*  // to calculate miles
-        public int calculateMiles(){
-
+        public void calculateMiles(){
+            this.miles += this.speed/10;
         }
-    */
            
     
 }

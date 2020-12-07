@@ -4,8 +4,8 @@ package CarSimulator;
 import java.util.*;
 public class Main {
 
- static RoadMap map = new RoadMap();
- static char[][] road = map.getRoad();
+    public static RoadMap map = new RoadMap();
+    public static char[][] road = map.getRoad();
  
     public static void main(String[] args){
         Car car = new Car();
@@ -29,17 +29,17 @@ public class Main {
             slowdown();
             clearScreen();
             map.setPoint(car.getX(), car.getY(), ' ');
+            map.switchTrafficLight(count++);
             car.run1();
             map.setPoint(car.getX(), car.getY(), 'M');
-            map.switchTrafficLight(count++);
         }
         printMap();
         System.out.println("the simulation is done");
     }
     public static void printMap(){
     
-        for(int i = 0; i <15;i++) {
-            for(int j = 0; j <35; j++) {
+        for(int i = 0; i < RoadMap.MAP_HEIGHT;i++) {
+            for(int j = 0; j < RoadMap.MAP_WIDTH; j++) {
             System.out.print(road[i][j]);
         }
             System.out.println();

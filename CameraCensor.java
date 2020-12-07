@@ -1,5 +1,6 @@
 package CarSimulator;
 
+
 public class CameraCensor{
 	public RoadMap map;
 	public static final int censorRange = 3;
@@ -147,8 +148,9 @@ public class CameraCensor{
 					}
 				}	
 			}
-			else
+			else{
 				redTrafficLight = false;
+			}
 			return redTrafficLight;
 		}
 		
@@ -172,64 +174,63 @@ public class CameraCensor{
 					}
 				}
 			}
-			else greenTrafficLight = false;
+			else { greenTrafficLight = false; }
 			return greenTrafficLight;
 		}	 
-
 
 		public boolean isThereParkingSignOnTheLeft(char direction) {
 			parkingSignOnTheLeft = false;
 			if(direction =='e') {
-			 for(int j = 0; j <7; j++) {
-			  for(int i = 0; i <4; i++) {
-			   if(tempRoad[i][j]=='P') {
-				setObsRow(i);
-				setObsCol(j);
-				parkingSignOnTheLeft = true;
-			   }
-			  }
-			 }
+				for(int j = 0; j <7; j++) {
+					for(int i = 0; i <4; i++) {
+			   			if(tempRoad[i][j]=='P') {
+							setObsRow(i);
+							setObsCol(j);
+							parkingSignOnTheLeft = true;
+			   			}
+			  		}
+			 	}
 			}
 			else if(direction == 's') {
-			 for(int i = 0; i <7; i++) {
-			  for(int j = 3; j<7; j++) {
-			   if(tempRoad[i][j]=='P') {
-				setObsRow(i);
-				setObsCol(j);
-				parkingSignOnTheLeft = true;
-			   }
-			  }
-			 }
+			 	for(int i = 0; i <7; i++) {
+			 	 	for(int j = 3; j<7; j++) {
+			 	  		if(tempRoad[i][j]=='P') {
+							setObsRow(i);
+							setObsCol(j);
+							parkingSignOnTheLeft = true;
+			  	 		}
+			  		}
+			 	}
 			}
-			else parkingSignOnTheLeft = false;
+			else { parkingSignOnTheLeft = false; }
 			return parkingSignOnTheLeft;
 		   }
 		   
 		public boolean isThereParkingSignOnTheRight(char direction) {
 			parkingSignOnTheRight = false;
 			if(direction =='e') {
-			 for(int j = 0; j <7; j++) {
-			  for(int i = 3; i <7; i++) {
-			   if(tempRoad[i][j]=='P') {
-				setObsRow(i);
-				setObsCol(j);
-				parkingSignOnTheRight = true;
-			   }
-			  }
-			 }
+			 	for(int j = 0; j <7; j++) {
+			  		for(int i = 3; i <7; i++) {
+			   			if(tempRoad[i][j]=='P') {
+							setObsRow(i);
+							setObsCol(j);
+							parkingSignOnTheRight = true;
+			  			}
+			  		}
+			 	}
 			}
 			else if(direction == 's') {
-			 for(int i = 0; i <7; i++) {
-			  for(int j = 0; j<4; j++) {
-			   if(tempRoad[i][j]=='P') {
-				setObsRow(i);
-				setObsCol(j);
-				parkingSignOnTheRight= true;
-			   }
-			  }
-			 }
+			 	for(int i = 0; i <7; i++) {
+			  		for(int j = 0; j<4; j++) {
+			   			if(tempRoad[i][j]=='P') {
+							setObsRow(i);
+							setObsCol(j);
+							parkingSignOnTheRight= true;
+			   			}
+			  		}
+			 	}
 			}
-			else parkingSignOnTheRight = false;
+			else { parkingSignOnTheRight = false; }
 			return parkingSignOnTheRight;
 		   }
 
@@ -328,12 +329,15 @@ public class CameraCensor{
 			return "There's parking sign on your left.";
 		else if(parkingSignOnTheRight)
 			return "There's parking sign on your right.";
-		else
+		else 
 			return "You are on the right track.";
 	}
 
 }
 		
+
+
+     
 
 
      

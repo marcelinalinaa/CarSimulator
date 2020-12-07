@@ -12,7 +12,7 @@ public class Main {
         while(jalan){
             RoadMap.clearScreen();
             map.switchTrafficLight();
-            jalan = car.run1();
+            jalan = car.run();
             map.update(car);
             map.printMap();
             System.out.println(car.getCarReport());

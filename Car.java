@@ -40,7 +40,7 @@ public class Car {
 		return tempY;
 	}
 
-	public boolean run1(){
+	public boolean run(){
 		censor.doScanRoad(x, y, direction);
 		if(censor.isThereRedTrafficLight(direction)){
 			if(censor.getObsCol() == 0){

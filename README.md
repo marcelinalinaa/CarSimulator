@@ -1,5 +1,5 @@
 # CarSimulator
-This repository will contain OOP lab project
+Object-Oriented Programming (OOP) Course Project
 
 ## Team Member
 - David K. Koswari 
